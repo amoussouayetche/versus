@@ -21,6 +21,7 @@
     {{-- liste des personne de discution --}}
     @if (Auth::guard('client')->check())
     <div style="margin-bottom: 100px" class="row">
+
         @foreach ($admins as $admin)
             <div class="col-md-4 col-sm-6 mb-4">
                 <div class="card shadow-sm h-100">

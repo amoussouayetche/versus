@@ -39,7 +39,7 @@ Route::post('/vérifier-otp', [AuthController::class, 'verifierOtp'])->name('ver
 
 Route::middleware('auth.admin')->group(function () {
      //chat
-     Route::get('/liste-client', [ChatController::class, 'showAdmins'])->name('liste-client');
+    Route::get('/liste-client', [ChatController::class, 'showAdmins'])->name('liste-client');
     // chat
     // Route::get('/admins', [ChatController::class, 'showAdmins'])->name('chat.admins');
     Route::get('/chat-user/{client}', [ChatController::class, 'chatWithAdmin'])->name('chat.withClient');

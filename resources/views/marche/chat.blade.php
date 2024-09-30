@@ -12,15 +12,15 @@
     }
 
     .chat_window {
-        position: absolute;
-        width: calc(100% - 20px);
-        max-width: 800px;
-        height: 500px;
+        /* position: absolute;
+        width: calc(100% - 20px); */
+        /* max-width: 800px; */
+        /* height: 100%; */
         border-radius: 10px;
         background-color: #fff;
         left: 50%;
         top: 50%;
-        transform: translateX(-50%) translateY(-50%);
+        /* transform: translateX(-50%) translateY(-50%); */
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         background-color: #f0f0f0;
         overflow: hidden;
@@ -78,6 +78,8 @@
     }
 
     .bottom_wrapper {
+        position: absolute;
+        top: 84vh;
         width: 100%;
         padding: 10px;
         background-color: #fff;
@@ -115,11 +117,10 @@
         background-color: #357ab7;
     }
 </style>
-
-<div class="container chat_window">
+<div class="container chat_window" >
     <div class="row">
         <div class="col-sm-12">
-            <ul id="chat" class="messages">
+            <ul id="chat" class="messages" style="height: calc(100vh - 25vh); margin-top: 70px;">
                 @foreach ($messages as $message)
                     @if (Auth::guard('client')->check())
                         <li class="message {{ $message->sender_id == Auth::guard('admin')->id() ? 'right' : 'left' }}">
@@ -142,12 +143,12 @@
                     @endif
                 @endforeach
             </ul>
-            <div class="bottom_wrapper">
+            <div class="bottom_wrapper justify-content-center">
                 @if (Auth::guard('admin')->check())
                     <form method="POST" action="{{ route('chat.sendMessageClient', $client->id) }}">
                         @csrf
                         <div class="d-flex flex-row">
-                            <input type="text" name="message" class="message_input w-100"
+                            <input type="text" name="message" class="message_input"
                                 placeholder="Écrivez votre message ici..." />
                             <button style="background-color: blueviolet;" type="submit" class="send_message">Envoyer</button>
                         </div>
@@ -156,7 +157,7 @@
                     <form method="POST" action="{{ route('chat.sendMessage', $admin->id) }}">
                         @csrf
                         <div class="d-flex flex-row">
-                            <input type="text" name="message" class="message_input w-100"
+                            <input type="text" name="message" class="message_input"
                                 placeholder="Écrivez votre message ici..." />
                             <button type="submit" class="send_message">Envoyer</button>
                         </div>
