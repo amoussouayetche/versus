@@ -31,10 +31,3 @@ jobs:
           port: ${{ secrets.PORT || 21 }}
           protocol: ftp
           dry-run: false
-          exclude: |
-            .env
-            node_modules/
-            vendor/
-            .git/
-            tests/
-            storage/logs/
