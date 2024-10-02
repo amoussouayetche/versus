@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\Client;
+use App\Models\Article;
 use App\Models\Produit;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
@@ -16,7 +18,10 @@ class ClientController extends Controller
     {
         if (Auth::guard('client')->check()) {
             $clients = Client::get();
-            return view('marche.accueil', compact('clients'));
+            $articles = Article::get();
+            $admins = Admin::get();
+            $produits = Produit::get();
+            return view('marche.accueil', compact('clients', 'produits', 'admins', 'articles'));
         }
     }
 
@@ -40,7 +45,9 @@ class ClientController extends Controller
 
     public function information()
     {
-        return view('marche.info');
+        $lien = 'accueil';
+        $nom_page = 'Information';
+        return view('marche.info', compact('lien', 'nom_page'));
     }
 
     public function panier()

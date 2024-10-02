@@ -1,9 +1,14 @@
 @include('partials.head')
 @include('partials.header')
 
-<div class="container">
+<div style="margin-top: 60px; 
+margin-bottom: 60px;
+overflow-y: auto;
+flex: 1;
+padding: 20px;
+background-color: white;" class="container">
     <!-- Champ de recherche -->
-    <div class="row" style="margin-top: 80px;">
+    <div class="row">
         <div class="d-flex justify-content-between">
             <a href=""
                 class="btn btn-outline-primary w-100 rounded-pill me-2 d-flex align-items-center justify-content-center  py-3 my-4">
@@ -15,12 +20,12 @@
         </div>
     </div>
 
-    {{-- liste des personne de discution --}}
-    <div style="margin-bottom: 100px" class="row">
+    {{-- liste des commande --}}
+    <div class="row">
         {{-- @foreach ($admins as $admin) --}}
             <div class="col-md-4 col-sm-6 mb-4">
                 <div class="card shadow-sm h-100">
-                    <div class="card-body">
+                    <div class="card-body shadow">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
                                 <img src="https://img.freepik.com/free-photo/red-white-pills_23-2147983100.jpg?t=st=1727546625~exp=1727550225~hmac=abb3e9570c9e8f7cf7f1a11fbfe863d36a3cdf0b3e81734c6c4f65dda404aa18&w=1060" class="rounded-3" style="width: 100px; height: 100px;"

@@ -3,8 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\GProduitController;
+use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,13 +43,30 @@ Route::get('/page-otp', [AuthController::class, 'pageOtp'])->name('page-otp');
 Route::post('/vérifier-otp', [AuthController::class, 'verifierOtp'])->name('verifier-otp');
 
 Route::middleware('auth.admin')->group(function () {
+
+    Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
      //chat
     Route::get('/liste-client', [ChatController::class, 'showAdmins'])->name('liste-client');
-    // chat
-    // Route::get('/admins', [ChatController::class, 'showAdmins'])->name('chat.admins');
-    Route::get('/chat-user/{client}', [ChatController::class, 'chatWithAdmin'])->name('chat.withClient');
-    Route::post('/chat-user/{client}', [ChatController::class, 'sendMessage'])->name('chat.sendMessageClient');
+    Route::get('/chat/client/{client}', [ChatController::class, 'chatWithClient'])->name('chat.withClient');
+    Route::post('/chat/client/{client}', [ChatController::class, 'sendMessageToClient'])->name('chat.sendMessageClient');
+    
+        // concernant les categories
+    Route::get('Categorie', [CategorieController::class, 'index'])->name('categorie');
+    Route::resource('categories', CategorieController::class);
+    Route::post('categories/{id}', [CategorieController::class, 'update'])->name('modifier');
+    Route::delete('categories/{id}', [CategorieController::class, 'destroy'])->name('destroy');
 
+    //Concernant les produits
+    Route::get('Produits', [ProduitController::class, 'index'])->name('produit.index');
+    Route::post('ajout-produits', [ProduitController::class, 'store'])->name('produit.store');
+    Route::post('produit/{id}', [ProduitController::class, 'update'])->name('modifierproduit');
+    Route::delete('produit/{id}', [ProduitController::class, 'destroy'])->name('detruireproduit');
+    Route::get('produit/{id}', [ProduitController::class, 'show'])->name('voir');
+
+   //  docteur
+   Route::resource('personnels', AdminController::class);
+   // article
+   Route::resource('articles', ArticleController::class);
 });
 
 Route::middleware('auth.client')->group(function () {
@@ -55,6 +77,7 @@ Route::middleware('auth.client')->group(function () {
     Route::get('/accueil', [ClientController::class, 'index'])->name('accueil');
     //chat
     Route::get('/liste-admin', [ChatController::class, 'showAdmins'])->name('liste-admin');
+    
     // boutique
     Route::get('/boutique', [ClientController::class, 'boutique'])->name('boutique');
     //info
@@ -67,14 +90,20 @@ Route::middleware('auth.client')->group(function () {
     Route::post('/update-quantity/{id}', [ProduitController::class, 'updateQuantity'])->name('update-quantity');
 
     // chat
-    // Route::get('/admins', [ChatController::class, 'showAdmins'])->name('chat.admins');
-    Route::get('/chat/{admin}', [ChatController::class, 'chatWithAdmin'])->name('chat.withAdmin');
-    Route::post('/chat/{admin}', [ChatController::class, 'sendMessage'])->name('chat.sendMessage');
-   
+    Route::get('/admins', [ChatController::class, 'showAdmins'])->name('admins.list');
+    Route::get('/chat/admin/{admin}', [ChatController::class, 'chatWithAdmin'])->name('chat.withAdmin');
+    Route::post('/chat/admin/{admin}', [ChatController::class, 'sendMessage'])->name('chat.sendMessage');
+
     // payement
     Route::get('/moyen-payement', [ProduitController::class, 'pagePayement'])->name('page-payement');
    // commande
     Route::get('/page-commande', [ProduitController::class, 'pageCommande'])->name('page-commande');
 
-
 });
+
+
+
+
+
+
+ 

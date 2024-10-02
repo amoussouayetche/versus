@@ -1,0 +1,78 @@
+img {
+object-fit: cover;
+object-position: center;
+max-width: 100%;
+max-height: 100%;
+}
+
+#labeldesign>div>span {
+margin: 10px 0px;
+font: 20px bold;
+color: black;
+float: right;
+}
+
+#labeldesign>div>label {
+margin: 10px 55px;
+font: 20px bold;
+color: black;
+}
+
+#labeldesign>div {
+text-align: center;
+}
+#div_total {
+font: 20px bolder;
+}
+
+.container form .filtrer{
+margin-bottom: 10px;
+justify-content: space-evenly;
+display: flex;
+flex-wrap: wrap;
+}  
+
+form .entrer{
+background: rgb(222, 216, 216);
+width: 200px;
+font: 20px bolder;
+box-shadow: inset 0 1px 0  blue;
+}  
+
+.div_voir_modal {
+font: 20px ;
+text-align: center;
+}
+
+.div_voir_modal span{
+font: 20px bold;
+text-align: center;
+color: blue;
+margin: 5px;
+}
+
+.loginLabel {
+    font-size: 2rem;
+    text-align: center;
+    color: #2396e9;
+}
+
+
+.gradient-custom-2 {
+    background: #fccb90;
+    background: -webkit-linear-gradient(to right, #2376e7, #0e57c1, #00399c);
+    background: linear-gradient(to right, #2376e7, #0e57c1, #00399c);
+}
+
+@media (min-width: 768px) {
+    .gradient-form {
+        height: 100vh !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .gradient-custom-2 {
+        border-top-right-radius: .3rem;
+        border-bottom-right-radius: .3rem;
+    }
+}

@@ -42,19 +42,26 @@
                     </div>
 
                     <!-- Champ Date de Naissance -->
-                    <div class="group-input input-group d-flex flex-row mb-3">
-                        <span class="icon-radius input-group-text bg-light shadow"><i
-                                class="fa-solid fa-calendar-days"></i></span>
+                    <div class="group-input input-group d-flex flex-row mb-1">
+                        <!-- Icône de calendrier -->
+                        <span class="icon-radius input-group-text bg-light shadow">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </span>
+                        <!-- Champ de saisie de date avec placeholder -->
                         <input type="date"
-                            class="input-radius form-control shadow @error('naissance') is-invalid @enderror" id="naissance"
-                            name="naissance" value="{{ old('naissance') }}">
-                        @error('naissance')
+                            class="input-radius form-control shadow @error('naissance') is-invalid @enderror" 
+                            id="naissance"
+                            name="naissance" 
+                            placeholder="Sélectionnez une date de naissance"
+                            value="{{ old('naissance') }}">
+                                            @error('naissance')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
+                    <span style="font-size: 13px; color: #888;">L'âge doit être d'au moins 9 mois.</span>
+                    
                     <!-- Champ Mot de Passe -->
-                    <div class="group-input input-group d-flex flex-row mb-3">
+                    <div class="group-input input-group d-flex flex-row mb-1">
                         <span class="icon-radius input-group-text bg-light shadow"><i class="fa-solid fa-lock"></i></span>
                         <input type="password"
                             class="input-radius form-control shadow @error('password') is-invalid @enderror" id="password"
@@ -63,9 +70,10 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    <span style="font-size: 13px; color: #888;">Le mot de passe doit être d'au moins 8 caractères.</span>
 
                     <!-- Champ Confirmation Mot de Passe -->
-                    <div class="group-input input-group d-flex flex-row mb-3">
+                    <div class="group-input input-group d-flex flex-row mb-1">
                         <span class="icon-radius input-group-text bg-light shadow"><i class="fa-solid fa-lock"></i></span>
                         <input type="password"
                             class="input-radius form-control shadow @error('password_confirmation') is-invalid @enderror"

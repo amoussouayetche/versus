@@ -3,11 +3,125 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produit;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProduitController extends Controller
 {
     //
+    public function index()
+    {
+        //
+        $produits = Produit::get();
+        $categories = Categorie::get();
+        return view('page_administration.produit', compact('produits', 'categories'));
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            // 'libelle' => 'required|unique:produits,libelle',
+            'libelle' => 'required',
+            'description' => 'required',
+            'prix' => 'required|numeric',
+            'categorie' => 'required',
+            'image' => 'required|image|mimes:jpg,jpeg,png,svg'
+        ], [
+            'libelle.required' => 'Le champ libellé du produit est requis.',
+            'libelle.unique' => 'Ce libelle du produit existe dejà.',
+            'prix_produit.required' => 'Le champ prix du produit est requis.',
+            'prix_produit.numeric' => 'Le champ prix du produit doit être un nombre.', // Message d'erreur personnalisé
+            'categorie.required' => 'Le champ catégorie du produit est requis.',
+            'stock_produit.required' => 'Le champ stock du produit est requis.',
+            'stock_produit.numeric' => 'Le champ stock doit être un nombre.',
+            'stock_critique.required' => 'Le champ stock critique du produit est requis.',
+            'stock_critique.numeric' => 'Le champ stock critique doit est un nombre.',
+            'image.required' => 'L\'image du produit est requise.',
+            'image.image' => 'Le fichier doit être une image.',
+            'image.mimes' => 'L\'image doit être au format jpg, jpeg, png ou svg.',
+        ]);
+
+        $idAdmin = Auth::guard('admin')->user()->id;
+        
+        $image = $request->file('image');
+        $imagePath = 'images/';
+        $uniqueImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+        $image->move($imagePath, $uniqueImage);
+        $validatedData['image'] = $uniqueImage;
+
+        // Ajoutez l'ID de l'utilisateur au tableau de données validées
+        // $validatedData['id_admin'] = $idAdmin;
+        Produit::create($validatedData);
+
+        return back()->with('success', 'Produit ajouté avec succès');
+    }
+
+    public function show($id)
+    {
+        $produits = Produit::where('id', $id)->first();
+
+        if (!$produits) {
+            abort(404);
+        }
+
+        return view('produit.show', compact('produits'));
+        //
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'libelle' => 'required',
+            'description' => 'required',
+            'prix' => 'required',
+            'categorie' => 'required',
+            'image' => 'image|mimes:jpg,jpeg,png,svg',
+        ]);
+
+        // Obtenez l'élément à mettre à jour en fonction de l'ID
+        $element = Produit::find($id);
+
+        if (!$element) {
+            // Gérez le cas où l'élément n'a pas été trouvé (ID invalide, par exemple)
+            return redirect()->route('produit.index')->with('error', 'L\'élément n\'existe pas.');
+        }
+
+        // Mettez à jour l'image uniquement si elle est fournie
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imagePath = 'images/';
+            $uniqueImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($imagePath, $uniqueImage);
+            $element->image = $uniqueImage;
+        }
+
+        // Mettez à jour les autres champs
+        $element->libelle = $request->libelle;
+        $element->description = $request->description;
+        $element->prix = $request->prix;
+        $element->categorie = $request->categorie;
+
+        $element->save();
+
+        // Redirigez l'utilisateur ou renvoyez une réponse JSON appropriée
+        return redirect()->route('produit.index')->with('success', 'L\'élément a été mis à jour avec succès.');
+    }
+
+    public function destroy($id)
+    {
+        $element = Produit::where('id', $id)->first();
+
+        if (!$element) {
+            return redirect()->route('produit.index')->with('error', 'Le produit que vous essayez de supprimer n\'existe pas.');
+        }
+
+        // L'élément existe, vous pouvez le supprimer en toute sécurité
+        $element->delete();
+
+        return redirect()->route('produit.index')->with('success', 'Produit supprimé avec succès');
+    }
+
     public function pagePayement()
     {
         $lien = 'mon-panier';
@@ -24,17 +138,17 @@ class ProduitController extends Controller
 
     public function addProduct($id)
     {
-        $produits = Produit::findOrFail($id);
+        $produit = Produit::findOrFail($id);
         $cart = session()->get('cart', []);
         if (isset($cart[$id])) {
             $cart[$id]['quantity']++;
         } else {
             $cart[$id] = [
-                'libelle' => $produits->libelle,
-                'description' => $produits->description,
+                'libelle' => $produit->libelle,
+                'description' => $produit->description,
                 'quantity' => 1,
-                'prix' => $produits->prix,
-                'image' => $produits->image
+                'prix' => $produit->prix,
+                'image' => $produit->image
             ];
         }
 
@@ -88,70 +202,5 @@ class ProduitController extends Controller
             session()->put('cart', $cart);
             session()->flash('success', 'Le produit a été ajouté.');
         }
-    }
-
-    public function validerCommande()
-    {
-        // Récupérez les éléments actuels du panier depuis la session
-        $panier = session('cart');
-        $idPersonnel = Auth::user()->name;
-
-        if (empty($panier)) {
-            return redirect()->back()->with('error', 'Le panier est vide.');
-        }
-
-        // Initialiser un tableau pour stocker les produits atteignant le stock critique
-        $produitsStockCritique = [];
-
-        foreach ($panier as $id => $details) {
-            $produit = Produits::find($id);
-
-            // Vérifier si le stock est inférieur ou égal à 0
-            if ($produit->stock_produit <= 0) {
-                // Stock épuisé pour ce produit, stockez-le dans le tableau et bloquez l'exécution ici
-                $produitsStockCritique[] = $produit->libelle;
-                return redirect()->back()->with('error', 'Stock épuisé pour le produit : ' . $produit->libelle);
-            }
-
-            if ($produit->stock_produit - $details['quantity'] < $produit->stock_critique) {
-                // Stock critique atteint pour ce produit, stockez-le dans le tableau
-                $produitsStockCritique[] = $produit->libelle;
-            }
-        }
-
-        // Traiter les produits atteignant le stock critique ici
-        if (!empty($produitsStockCritique)) {
-            // Vous pouvez les stocker dans la session pour les pr$produits ultérieurement
-            session()->put('produitsStockCritique', $produitsStockCritique);
-
-            // Ou envoyer un message à l'utilisateur pour l'informer que certains produits ont atteint le stock critique
-            // flash()->error('Certains produits ont atteint le stock critique.');
-        }
-
-        // Enregistrez les éléments du panier dans la table d'historique
-        foreach ($panier as $id => $details) {
-            $produit = Produits::find($id);
-
-            // Vérifier si le stock est supérieur à 0 avant d'enregistrer la commande
-            if ($produit->stock_produit > 0) {
-                commandes::create([
-                    'produit_commande' => $details['libelle'],
-                    'quantite_commande'=> $details['quantity'],
-                    'id_user' => $idPersonnel,
-                    'total_commande' => $details['prix'] * $details['quantity'],
-                    // ... Ajoutez d'autres colonnes d'historique si nécessaire
-                ]);
-
-                // Mettre à jour le stock du produit
-                $produit->stock_produit -= $details['quantity'];
-                $produit->save();
-            }
-        }
-
-        // Vider le panier actuel
-        session()->forget('cart');
-
-        // Redirigez l'utilisateur vers une page de confirmation 
-        return back()->with('success', 'Commande validée avec succès');
     }
 }

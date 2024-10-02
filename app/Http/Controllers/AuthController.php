@@ -122,7 +122,9 @@ class AuthController extends Controller
         }
     
         // Si aucune tentative ne fonctionne, retourner un message d'erreur
-        return back()->withErrors([
+        return back()->withInput([
+            'pseudo' => $credentials['pseudo'],
+        ])->withErrors([
             'pseudo' => 'Les informations de connexion sont incorrectes.',
         ]);
     }

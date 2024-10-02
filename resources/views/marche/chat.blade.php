@@ -12,16 +12,7 @@
     }
 
     .chat_window {
-        /* position: absolute;
-        width: calc(100% - 20px); */
-        /* max-width: 800px; */
-        /* height: 100%; */
         border-radius: 10px;
-        background-color: #fff;
-        left: 50%;
-        top: 50%;
-        /* transform: translateX(-50%) translateY(-50%); */
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         background-color: #f0f0f0;
         overflow: hidden;
     }
@@ -30,14 +21,8 @@
         background-color: #4a4a4a;
         width: 100%;
         padding: 20px 0 15px;
-        box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
         color: white;
         text-align: center;
-    }
-
-    .top_menu .title {
-        font-size: 20px;
-        font-weight: 500;
     }
 
     .messages {
@@ -52,7 +37,6 @@
     .messages .message {
         display: flex;
         margin-bottom: 15px;
-        align-items: flex-start;
     }
 
     .messages .message.right {
@@ -64,8 +48,6 @@
         padding: 10px 15px;
         border-radius: 15px;
         background-color: #ececec;
-        display: inline-block;
-        font-size: 16px;
         color: #333;
         margin-left: 10px;
     }
@@ -78,8 +60,6 @@
     }
 
     .bottom_wrapper {
-        position: absolute;
-        top: 84vh;
         width: 100%;
         padding: 10px;
         background-color: #fff;
@@ -95,11 +75,6 @@
         outline: none;
         font-size: 16px;
         margin-right: 10px;
-        transition: border-color 0.3s ease;
-    }
-
-    .bottom_wrapper .message_input:focus {
-        border-color: #4a90e2;
     }
 
     .bottom_wrapper .send_message {
@@ -109,58 +84,47 @@
         border-radius: 25px;
         padding: 10px 20px;
         cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
     }
 
     .bottom_wrapper .send_message:hover {
         background-color: #357ab7;
     }
 </style>
-<div class="container chat_window" >
+
+<div class="container chat_window" style="margin-top: 60px; margin-bottom: 60px;">
     <div class="row">
         <div class="col-sm-12">
-            <ul id="chat" class="messages" style="height: calc(100vh - 25vh); margin-top: 70px;">
+            <ul id="chat" class="messages">
                 @foreach ($messages as $message)
                     @if (Auth::guard('client')->check())
-                        <li class="message {{ $message->sender_id == Auth::guard('admin')->id() ? 'right' : 'left' }}">
-                            <div class="text_wrapper">
-                                <div class="text">
-                                    {{-- <strong>{{ $message->sender_id == Auth::guard('client')->id() ? 'Vous' : $client->pseudo }}:</strong> --}}
-                                    {{ $message->message }}
-                                </div>
-                            </div>
-                        </li>
-                    @elseif (Auth::guard('admin')->check())
-                        <li class=" message {{ $message->sender_id == Auth::guard('client')->id() ? 'right' : 'left' }}">
-                            <div class="bg-primary text-white text_wrapper">
-                                <div class="fw-4 fs-6 text">
-                                    {{-- <strong>{{ $message->sender_id == Auth::guard('admin')->id() ? 'Vous' : $admin->name }}:</strong> --}}
-                                    {{ $message->message }}
-                                </div>
-                            </div>
-                        </li>
+                        <li class="message {{ $message->sender_type === 'client' ? 'right' : 'left' }}">
+                        @elseif(Auth::guard('admin')->check())
+                        <li class="message {{ $message->sender_type === 'admin' ? 'right' : 'left' }}">
                     @endif
+                    <div class="text_wrapper">
+                        <div class="text">
+                            <strong>{{ $message->sender_type === (Auth::guard('client')->check() ? 'client' : 'admin') ? 'Vous' : ($message->sender_type === 'client' ? $client->pseudo : $admin->name) }}:</strong>
+                            {{ $message->message }}
+                        </div>
+                    </div>
+                    </li>
                 @endforeach
             </ul>
-            <div class="bottom_wrapper justify-content-center">
+
+            <div class="bottom_wrapper">
                 @if (Auth::guard('admin')->check())
                     <form method="POST" action="{{ route('chat.sendMessageClient', $client->id) }}">
                         @csrf
-                        <div class="d-flex flex-row">
-                            <input type="text" name="message" class="message_input"
-                                placeholder="Écrivez votre message ici..." />
-                            <button style="background-color: blueviolet;" type="submit" class="send_message">Envoyer</button>
-                        </div>
+                        <input type="text" name="message" class="message_input"
+                            placeholder="Écrivez votre message ici..." required />
+                        <button type="submit" class="send_message">Envoyer</button>
                     </form>
                 @elseif (Auth::guard('client')->check())
                     <form method="POST" action="{{ route('chat.sendMessage', $admin->id) }}">
                         @csrf
-                        <div class="d-flex flex-row">
-                            <input type="text" name="message" class="message_input"
-                                placeholder="Écrivez votre message ici..." />
-                            <button type="submit" class="send_message">Envoyer</button>
-                        </div>
+                        <input type="text" name="message" class="message_input"
+                            placeholder="Écrivez votre message ici..." required />
+                        <button type="submit" class="send_message">Envoyer</button>
                     </form>
                 @endif
             </div>
