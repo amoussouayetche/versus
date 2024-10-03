@@ -48,7 +48,7 @@
                  <h2>{{ $nom_page }}</h2>
              </div>
              <div>
-                 <a href="{{ url('Produits') }}" class="text-light text-decoration-none">Administration</a>
+                 <a href="{{ url('dashboard') }}" class="text-light text-decoration-none">Administration</a>
              </div>
          </header>
      @endisset
@@ -87,14 +87,14 @@
                      <i class="fas fa-expand-arrows-alt"></i>
                  </a>
              </li>
-             {{-- <li class="nav-item">
+             <li class="nav-item">
                 <form action="{{ route('deconnexion') }}" method="post">
                     @csrf
-                    <a class="nav-link" href="" type="submit">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </a>
+                    <button class="nav-link btn btn-link" type="submit">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </button>
                 </form>
-             </li> --}}
+            </li>            
          </ul>
      </nav>
  @endif

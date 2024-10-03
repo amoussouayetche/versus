@@ -50,7 +50,7 @@ background-color: white;" class="container">
                         <div class="d-flex justify-content-between">
                             <a href="{{ route('chat.withAdmin', $admin->id) }}"
                                 class="btn btn-outline-primary w-100 me-2 d-flex align-items-center justify-content-center">
-                                <i class="fa fa-comments"></i> Discuter
+                                 En savoir plus <i class="fa fa-arrow-right mx-1"></i>
                             </a>
                             <a href="{{ route('chat.withAdmin', $admin->id) }}" class="btn btn-primary w-100">
                                 Prendre rendez-vous
@@ -81,7 +81,7 @@ background-color: white;" class="container">
                         <div class="d-flex justify-content-between">
                             <a style="color: blueviolet; border: 1px solid blueviolet;" href="{{ route('chat.withClient', $client->id) }}"
                                 class="fw-bold btn btn-outline-primary w-100 me-2 d-flex align-items-center justify-content-center">
-                                <i class="fa fa-comments"></i> Discuter
+                                En savoir plus
                             </a>
                         </div>
                     </div>

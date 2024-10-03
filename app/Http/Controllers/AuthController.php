@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -76,6 +77,16 @@ class AuthController extends Controller
             'naissance' => $validatedData['naissance'],
             'password' => bcrypt($validatedData['password']),
             'condition' => $validatedData['condition'],
+        ]);
+        
+        // Insérer également les informations du client dans la table 'users' de la base de données 'chatsystem'
+        DB::connection('mysql_chat')->table('users')->insert([
+            'name' => $validatedData['pseudo'],  // Utiliser 'pseudo' pour le nom
+            'email' => $validatedData['tel'],    // Utiliser le numéro de téléphone comme email ou identifiant unique
+            'password' => bcrypt($validatedData['password']), // Hasher le mot de passe
+            'role' => 'client',  // Ajouter un rôle pour identifier cet utilisateur comme client
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
         
         return redirect()->route('page-condition', ['client' => $client->id]);

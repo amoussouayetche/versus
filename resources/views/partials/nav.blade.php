@@ -33,20 +33,20 @@
                     <i class="ri-arrow-up-double-line text-light"></i>
                 </a>
                 @if (Auth::guard('admin')->check())
-                    <a href="{{ url('liste-client') }}"
+                    <a href="http://localhost:8000/chatify" target="_blank"
                         class="fw-bold text-dark text-uppercase text-decoration-none  d-flex flex-column text-center {{ Request::is('chat') ? 'active' : 'text-dark' }}">
                         <i class="ri-chat-3-line"></i>
                         <p style="font-size: 13px" class="mb-0">chat</p>
                     </a>
                 @elseif (Auth::guard('client')->check())
-                    <a href="{{ url('liste-admin') }}"
+                    <a href="http://localhost:8000/chatify" target="_blank"
                         class="fw-bold text-dark text-uppercase text-decoration-none  d-flex flex-column text-center {{ Request::is('chat') ? 'active' : 'text-dark' }}">
                         <i class="ri-chat-3-line"></i>
                         <p style="font-size: 13px" class="mb-0">chat</p>
                     </a>
                 @endif
                 
-                <a href="{{ url('info') }}"
+                <a href="{{ url('liste-admin') }}"
                     class="fw-bold text-dark text-uppercase text-decoration-none  d-flex flex-column text-center {{ Request::is('info') ? 'active' : 'text-dark' }}">
                     <i class="ri-file-info-line"></i>
                     <p style="font-size: 13px" class="mb-0">Information</p>

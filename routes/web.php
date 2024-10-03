@@ -1,5 +1,6 @@
 <?php
 
+use Chatify\ChatifyMessenger;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
@@ -43,14 +44,17 @@ Route::get('/page-otp', [AuthController::class, 'pageOtp'])->name('page-otp');
 Route::post('/vérifier-otp', [AuthController::class, 'verifierOtp'])->name('verifier-otp');
 
 Route::middleware('auth.admin')->group(function () {
+     //déconnexion
+     Route::post('/deconnexion', [AuthController::class, 'deconnexion'])->name('deconnexion');
 
+     // dashboard
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
-     //chat
+    //chat
     Route::get('/liste-client', [ChatController::class, 'showAdmins'])->name('liste-client');
     Route::get('/chat/client/{client}', [ChatController::class, 'chatWithClient'])->name('chat.withClient');
     Route::post('/chat/client/{client}', [ChatController::class, 'sendMessageToClient'])->name('chat.sendMessageClient');
     
-        // concernant les categories
+    // concernant les categories
     Route::get('Categorie', [CategorieController::class, 'index'])->name('categorie');
     Route::resource('categories', CategorieController::class);
     Route::post('categories/{id}', [CategorieController::class, 'update'])->name('modifier');
@@ -67,6 +71,7 @@ Route::middleware('auth.admin')->group(function () {
    Route::resource('personnels', AdminController::class);
    // article
    Route::resource('articles', ArticleController::class);
+
 });
 
 Route::middleware('auth.client')->group(function () {
@@ -99,11 +104,4 @@ Route::middleware('auth.client')->group(function () {
    // commande
     Route::get('/page-commande', [ProduitController::class, 'pageCommande'])->name('page-commande');
 
-});
-
-
-
-
-
-
- 
+}); 

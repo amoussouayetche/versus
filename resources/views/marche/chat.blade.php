@@ -2,135 +2,91 @@
 @include('partials.header')
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: "Calibri", "Roboto", sans-serif;
-        background-color: #fff;
-    }
-
-    .chat_window {
+    .doctor-image {
+        width: 100%;
+        height: auto;
         border-radius: 10px;
-        background-color: #f0f0f0;
-        overflow: hidden;
     }
-
-    .top_menu {
-        background-color: #4a4a4a;
+    .appointment-btn {
         width: 100%;
-        padding: 20px 0 15px;
+        background-color: #530c78de;
         color: white;
-        text-align: center;
-    }
-
-    .messages {
-        list-style: none;
-        padding: 20px;
-        margin: 0;
-        height: 350px;
-        overflow-y: auto;
-        background-color: #fff;
-    }
-
-    .messages .message {
-        display: flex;
-        margin-bottom: 15px;
-    }
-
-    .messages .message.right {
-        justify-content: flex-end;
-    }
-
-    .messages .message .text_wrapper {
-        max-width: 70%;
-        padding: 10px 15px;
-        border-radius: 15px;
-        background-color: #ececec;
-        color: #333;
-        margin-left: 10px;
-    }
-
-    .messages .message.right .text_wrapper {
-        background-color: #4a90e2;
-        color: #fff;
-        margin-left: 0;
-        margin-right: 10px;
-    }
-
-    .bottom_wrapper {
-        width: 100%;
-        padding: 10px;
-        background-color: #fff;
-        display: flex;
-        align-items: center;
-    }
-
-    .bottom_wrapper .message_input {
-        flex: 1;
         padding: 15px;
-        border-radius: 25px;
-        border: 1px solid #ddd;
-        outline: none;
-        font-size: 16px;
-        margin-right: 10px;
+        border-radius: 50px;
+        font-size: 1.2rem;
     }
-
-    .bottom_wrapper .send_message {
-        background-color: #4a90e2;
-        border: none;
+    .appointment-btn i {
+        float: right;
         color: white;
-        border-radius: 25px;
-        padding: 10px 20px;
-        cursor: pointer;
     }
-
-    .bottom_wrapper .send_message:hover {
-        background-color: #357ab7;
+    .doctor-info {
+        margin-top: 20px;
+    }
+    .discuss-btn {
+        width: 100%;
+        background-color: #e6f4ff;
+        color: #007bff;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: bold;
+    }
+    .container {
+        margin-top: 30px;
     }
 </style>
 
-<div class="container chat_window" style="margin-top: 60px; margin-bottom: 60px;">
+<div style="margin-top: 60px; 
+margin-bottom: 60px;
+overflow-y: auto;
+flex: 1;
+padding: 20px;
+background-color: white;" class="container">
     <div class="row">
-        <div class="col-sm-12">
-            <ul id="chat" class="messages">
-                @foreach ($messages as $message)
-                    @if (Auth::guard('client')->check())
-                        <li class="message {{ $message->sender_type === 'client' ? 'right' : 'left' }}">
-                        @elseif(Auth::guard('admin')->check())
-                        <li class="message {{ $message->sender_type === 'admin' ? 'right' : 'left' }}">
-                    @endif
-                    <div class="text_wrapper">
-                        <div class="text">
-                            <strong>{{ $message->sender_type === (Auth::guard('client')->check() ? 'client' : 'admin') ? 'Vous' : ($message->sender_type === 'client' ? $client->pseudo : $admin->name) }}:</strong>
-                            {{ $message->message }}
-                        </div>
-                    </div>
-                    </li>
-                @endforeach
-            </ul>
+        <!-- Doctor Image -->
+        <div class="col-12">
+            <img src="/images/{{ $admin->image }}" alt="{{ $admin->name }}" class="doctor-image">
+        </div>
 
-            <div class="bottom_wrapper">
-                @if (Auth::guard('admin')->check())
-                    <form method="POST" action="{{ route('chat.sendMessageClient', $client->id) }}">
-                        @csrf
-                        <input type="text" name="message" class="message_input"
-                            placeholder="Écrivez votre message ici..." required />
-                        <button type="submit" class="send_message">Envoyer</button>
-                    </form>
-                @elseif (Auth::guard('client')->check())
-                    <form method="POST" action="{{ route('chat.sendMessage', $admin->id) }}">
-                        @csrf
-                        <input type="text" name="message" class="message_input"
-                            placeholder="Écrivez votre message ici..." required />
-                        <button type="submit" class="send_message">Envoyer</button>
-                    </form>
-                @endif
+        <!-- Doctor Information -->
+        <div class="col-12 doctor-info">
+            <h3 class="fw-bold">{{ $admin->name }}</h3>
+            <p class="fw-bold mb-0">{{ $admin->specialite }}</p>
+            <p class="my-0"><i class="ri-phone-line"></i> (+228) 90 08 73 03</p>
+            <p class="my-0"><i class="ri-map-pin-line"></i> 2753, Bd Félix Houphouët Boigny</p>
+            <div class="fw-bold d-flex mt-1">
+                <i class="ri-time-line bg-primary text-white p-3 rounded-3"></i> 
+                <div class="d-flex flex-column">
+                    <p class="my-0 mx-2">08h00 - 12h00 à 14h00 - 18h00 </p>
+                    <p class="my-0 mx-2 fw-light">Horairede consultation</p>
+                </div>
             </div>
+        </div>
+
+        <!-- Discuss Button -->
+        <div class="col-12 text-center my-3">
+            <a href="#" class="discuss-btn text-decoration-none fw-bold px-4"> <i class="ri-chat-3-line"></i>Discuter</a>
+        </div>
+
+        <!-- Description -->
+        <div class="col-12 mt-3">
+        <h5>Description</h5>
+            <p class="">
+                Polyclinique dans un immeuble de trois niveaux, avec plusieurs services techniques, la clinique 
+                BARRUET assure un fonctionnement 24h/24. Des consultations d'urgence et simples sont réalisées dans 
+                des spécialités diverses.
+            </p>
+        </div>
+
+        <!-- Appointment Button -->
+        <!-- boutton pour prendre un rendez-vous-->
+        <div class="col-sm-12 total-container">
+          
+            <a style="width: 80%;" href="#"
+                class="checkout-btn text-decoration-none fs-4">Prendre un rendez-vous <i style="color: blueviolet"
+                    class="fas fa-arrow-right bg-white p-2 float-end rounded-circle"></i></a>
         </div>
     </div>
 </div>
-
 @include('partials.nav')
 @include('partials.footer')

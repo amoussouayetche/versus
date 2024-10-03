@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -41,14 +42,7 @@ class AdminController extends Controller
             'image.mimes' => 'L\'image doit être au format jpg, jpeg, png ou svg.',
         ]);
 
-        // Vérifier si l'utilisateur actuellement connecté a le rôle "gerant"
-        // if (Auth::guard('admin')->user()->check()) {
-        //     // L'utilisateur connecté est un "gerant", donc il ne peut attribuer que les rôles "gerant" et "vendeur"
-        //     if ($dataValid['role'] == 'admin') {
-        //         return back()->with('error', 'Vous n\'avez pas la permission d\'attribuer ce rôle.');
-        //     }
-        // }
-        $idPersonnel = Auth::guard('admin')->user()->idAdmin;
+        // $idPersonnel = Auth::guard('admin')->user()->idAdmin;
 
             // Hasher le mot de passe
             $dataValid['password'] = bcrypt($dataValid['password']);
@@ -69,11 +63,17 @@ class AdminController extends Controller
                 echo "Aucun fichier n'a été téléversé.";
             }
 
-            // Ajouter l'ID de l'utilisateur au tableau de données validées
-            // $dataValid['id_user'] = $idPersonnel;
-
             // Créer un nouvel utilisateur
             Admin::create($dataValid);
+
+            // Insérer dans la table users de la base 'chatsystem'
+            DB::connection('mysql_chat')->table('users')->insert([
+                'name' => $dataValid['name'],
+                'email' => $dataValid['email'],
+                'password' => $dataValid['password'], // Hashed password
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         
         return back()->with('success', 'Le docteur a été ajouté avec succès.');
     }
@@ -133,20 +133,34 @@ class AdminController extends Controller
         // Sauvegarder les modifications dans la base de données
         $personnel->save();
 
+        // Mettre à jour également dans la table 'users' de la base de données 'chatsystem'
+        DB::connection('mysql_chat')->table('users')
+        ->where('email', $personnel->email)  // Trouver l'utilisateur par email ou un autre identifiant unique
+        ->update([
+            'name' => $dataValid['name'],
+            'email' => $dataValid['email'],
+            'updated_at' => now(),
+        ]);
+
         return back()->with('success', 'Le personnel a été modifié avec succès.');
     }
 
-    public function destroy($id)
+   public function destroy($id)
     {
-        // Récupérer l'utilisateur que vous souhaitez supprimer
+        // Récupérer l'administrateur que vous souhaitez supprimer
         $personnel = Admin::find($id);
 
         if (!$personnel) {
             return back()->with('error', 'Le personnel n\'existe pas.');
         }
 
-        // Supprimer l'utilisateur
+        // Supprimer l'utilisateur de la base de données 'venus'
         $personnel->delete();
+
+        // Supprimer également de la table 'users' dans la base de données 'chatsystem'
+        DB::connection('mysql_chat')->table('users')
+            ->where('email', $personnel->email)  // Trouver l'utilisateur par email ou un autre identifiant unique
+            ->delete();
 
         return back()->with('success', 'Le personnel a été supprimé avec succès.');
     }
