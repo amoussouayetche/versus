@@ -220,7 +220,7 @@
 
                             <h6 class="mb-2 fs-2" style="padding: 5px; position: relative;">{{ $article->libelle }}</h6>
                             <p style="padding: 10px; position: relative; font-size: 20px">
-                                {{ \Illuminate\Support\Str::words($article->resume, 17, '...') }}</p>
+                                {{ \Illuminate\Support\Str::words($article->resume, 9, '...') }}</p>
                             <a href="{{ $article->lien }}" class="fs-4 text-decoration-none text-light"
                                 style="padding: 5px; border-radius: 5px; position: relative;">Lire l'article <i
                                     class="fa fa-arrow-right"></i></a>
@@ -252,15 +252,19 @@
             <!-- Cartes des produits -->
             @foreach ($produits as $produit)
                 <div class="col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-                    <div class="product-card text-center p-3 shadow" style="border-radius: 10px;">
-                        <div class="wishlist-icon" style="position: absolute; top: 10px; right: 10px;">
+                    <div class="product-card text-center p-3 shadow d-flex flex-column justify-content-around" style="border-radius: 10px;">
+                        {{-- <div class="wishlist-icon" style="position: absolute; top: 10px; right: 10px;">
                             <a href="{{ route('ajouter-produit', $produit->id) }}">
                                 <i class="ri-shopping-cart-2-line"></i></a>
-                        </div>
-                        <img style="width: 300px; height: 150px;" src="images/{{ $produit->image }}"
+                        </div> --}}
+                        <div>
+                            <img style="width: 100%;" src="images/{{ $produit->image }}"
                             alt="{{ $produit->libelle }}" class="img-fluid mb-3" style="border-radius: 10px;">
-                        <p class="mb-1" style="font-size: 1.1em; font-weight: 500;">{{ $produit->libelle }}</p>
-                        <p style="font-size: 1.2em; font-weight: bold; color: #1d327f;">{{ $produit->prix }} FCFA</p>
+                        </div>
+                        <div>
+                            <p class="mb-1" style="font-size: 1.1em; font-weight: 500;">{{ $produit->libelle }}</p>
+                            <p style="font-size: 1.2em; font-weight: bold; color: #1d327f;">{{ $produit->prix }} FCFA</p>
+                        </div>
                     </div>
                 </div>
             @endforeach
