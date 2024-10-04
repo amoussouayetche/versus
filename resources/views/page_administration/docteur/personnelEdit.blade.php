@@ -15,33 +15,34 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="name" class="form-label">Nom: </label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ $personnel->name }}"
-                            required>
+                        <input type="text" class="form-control" id="name" name="name" 
+                            value="{{ old('name', $personnel->name) }}" required>
+                        @error('name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email: </label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ $personnel->email }}"
-                            required>
+                        <input type="email" class="form-control" id="email" name="email" 
+                            value="{{ old('email', $personnel->email) }}" required>
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label for="specialite" class="form-label">Spécialité: </label>
-                        <input type="text" class="form-control" id="specialite" name="specialite" value="{{ $personnel->specialite }}"
-                            required>
+                        <input type="text" class="form-control" id="specialite" name="specialite" 
+                            value="{{ old('specialite', $personnel->specialite) }}" required>
+                        @error('specialite')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
-                    {{-- <!-- <div class="mb-3">
-                        <label for="password" class="form-label">Mot de passe: </label>
-                        <input type="password" class="form-control" id="password" name="password"
-                            value="{{ $personnel->password }}" required>
-                    </div> --> --}}
-                    {{-- <div class="mb-3">
-                        <label for="contact" class="form-label">Contact: </label>
-                        <input type="tel" class="form-control" id="contact" name="contact"
-                            value="{{ $personnel->contact }}" required>
-                    </div> --}}
-                  
                     <div class="mb-3">
                         <label for="image" class="form-label">Image: </label>
-                        <input type="file" class="form-control" id="image" name="image" value="{{ $personnel->image }}">
+                        <input type="file" class="form-control" id="image" name="image">
+                        @error('image')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="float-right">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>

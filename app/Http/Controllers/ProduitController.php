@@ -6,6 +6,7 @@ use App\Models\Produit;
 use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Exceptions\PostTooLargeException;
 
 class ProduitController extends Controller
 {
@@ -15,47 +16,52 @@ class ProduitController extends Controller
         //
         $produits = Produit::get();
         $categories = Categorie::get();
-        return view('page_administration.produit', compact('produits', 'categories'));
+        return view('page_administration.produit.produit', compact('produits', 'categories'));
     }
+
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            // 'libelle' => 'required|unique:produits,libelle',
-            'libelle' => 'required',
-            'description' => 'required',
-            'prix' => 'required|numeric',
-            'categorie' => 'required',
-            'image' => 'required|image|mimes:jpg,jpeg,png,svg'
-        ], [
-            'libelle.required' => 'Le champ libellé du produit est requis.',
-            'libelle.unique' => 'Ce libelle du produit existe dejà.',
-            'prix_produit.required' => 'Le champ prix du produit est requis.',
-            'prix_produit.numeric' => 'Le champ prix du produit doit être un nombre.', // Message d'erreur personnalisé
-            'categorie.required' => 'Le champ catégorie du produit est requis.',
-            'stock_produit.required' => 'Le champ stock du produit est requis.',
-            'stock_produit.numeric' => 'Le champ stock doit être un nombre.',
-            'stock_critique.required' => 'Le champ stock critique du produit est requis.',
-            'stock_critique.numeric' => 'Le champ stock critique doit est un nombre.',
-            'image.required' => 'L\'image du produit est requise.',
-            'image.image' => 'Le fichier doit être une image.',
-            'image.mimes' => 'L\'image doit être au format jpg, jpeg, png ou svg.',
-        ]);
-
-        $idAdmin = Auth::guard('admin')->user()->id;
-        
-        $image = $request->file('image');
-        $imagePath = 'images/';
-        $uniqueImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-        $image->move($imagePath, $uniqueImage);
-        $validatedData['image'] = $uniqueImage;
-
-        // Ajoutez l'ID de l'utilisateur au tableau de données validées
-        // $validatedData['id_admin'] = $idAdmin;
-        Produit::create($validatedData);
-
-        return back()->with('success', 'Produit ajouté avec succès');
+        try {
+            $validatedData = $request->validate([
+                // 'libelle' => 'required|unique:produits,libelle',
+                'libelle' => 'required',
+                'description' => 'required',
+                'prix' => 'required|numeric',
+                'categorie' => 'required',
+                'image' => 'required|image|mimes:jpg,jpeg,png,svg|max:4096'
+            ], [
+                'libelle.required' => 'Le champ libellé du produit est requis.',
+                'libelle.unique' => 'Ce libelle du produit existe déjà.',
+                'prix.required' => 'Le champ prix du produit est requis.',
+                'prix.numeric' => 'Le champ prix du produit doit être un nombre.', // Message d'erreur personnalisé
+                'categorie.required' => 'Le champ catégorie du produit est requis.',
+                'image.required' => 'L\'image du produit est requise.',
+                'image.image' => 'Le fichier doit être une image.',
+                'image.max' => 'L\'image doit faire au maximum 4 Mo.',
+                'image.mimes' => 'L\'image doit être au format jpg, jpeg, png ou svg.',
+            ]);
+    
+            $idAdmin = Auth::guard('admin')->user()->id;
+    
+            $image = $request->file('image');
+            $imagePath = 'images/';
+            $uniqueImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($imagePath, $uniqueImage);
+            $validatedData['image'] = $uniqueImage;
+    
+            // Ajoutez l'ID de l'utilisateur au tableau de données validées
+            // $validatedData['id_admin'] = $idAdmin;
+            Produit::create($validatedData);
+    
+            return back()->with('success', 'Produit ajouté avec succès');
+        } catch (PostTooLargeException $e) {
+            return back()->withErrors(['image' => 'Le fichier que vous essayez de télécharger est trop volumineux.']);
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Une erreur est survenue.']);
+        }
     }
+    
 
     public function show($id)
     {

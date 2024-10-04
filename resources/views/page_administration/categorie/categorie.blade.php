@@ -3,6 +3,37 @@
 @php
 $total = 0
 @endphp
+@if (Auth::guard('admin')->check())
+<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
+                    class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="{{ route('liste-client') }}" class="nav-link">Retouner au chat</a>
+        </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                <i class="fas fa-expand-arrows-alt"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+           <form action="{{ route('deconnexion-a') }}" method="post">
+               @csrf
+               <button class="nav-link btn btn-link" type="submit">
+                   <i class="fas fa-sign-out-alt"></i> Déconnexion
+               </button>
+           </form>
+       </li>            
+    </ul>
+</nav>
+@endif
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -90,60 +121,11 @@ $total = 0
             </tbody>
 
             <!-- Modal de modification de catégorie -->
-            <div class="modal fade" id="modifier{{ $categorie->id }}" tabindex="-1"
-                aria-labelledby="modifierLabel{{ $categorie->id }}" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modifierLabel{{ $categorie->id }}">MODIFIER LA CATEGORIE</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="{{ route('modifier', ['id' => $categorie->id]) }}" method="POST"
-                                enctype="multipart/form-data">
-                                @csrf
-                                @method('PUT')
-                                <div class="mb-3">
-                                    <label for="libelle" class="form-label">Nom de la catégorie</label>
-                                    <input type="text" class="form-control" id="libelle" name="libelle"
-                                        value="{{ $categorie->libelle }}" required>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Fermer</button>
-                                    <button type="submit" class="btn btn-primary">Modifier</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @include('page_administration.categorie.edit-categorie')
             <!-- edit modal  -->
 
             <!-- Confirmation de supression -->
-            <div class="modal fade" id="supression{{ $categorie->id }}" tabindex="-1"
-                aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmer la suppression</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            Êtes-vous sûr de vouloir supprimer cette catégorie ?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                            <form action="{{ route('destroy', ['id' => $categorie->id]) }}" method="POST"
-                                enctype="multipart/form-data">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Supprimer</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @include('page_administration.categorie.delete-categorie')
             <!-- Fin de confirmation supression -->
 
             @endforeach
@@ -151,29 +133,8 @@ $total = 0
     </div>
 
     <!-- ajouter categorie modal -->
-    <div class="modal fade" id="ajouter" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">AJOUTER UNE CATEGORIE</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="nom" class="form-label">Nom de la catégorie</label>
-                            <input type="text" class="form-control" id="nom" name="libelle" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                            <button type="submit" class="btn btn-primary">Ajouter</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('page_administration.categorie.create-categorie')
+
     <!-- fin modal  -->
 </div>
  </div><!-- /.row -->

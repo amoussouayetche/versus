@@ -3,7 +3,36 @@
     @php
         $total = 0;
     @endphp
+    @if (Auth::guard('admin')->check())
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{{ route('liste-client') }}" class="nav-link">Retouner au chat</a>
+                </li>
+            </ul>
 
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <form action="{{ route('deconnexion-a') }}" method="post">
+                        @csrf
+                        <button class="nav-link btn btn-link" type="submit">
+                            <i class="fas fa-sign-out-alt"></i> Déconnexion
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    @endif
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
@@ -256,16 +285,18 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="nom" class="form-label">Libelle du produit</label>
-                                    <input type="text" class="form-control" id="nom" name="libelle" required>
+                                    <input type="text" class="form-control" value="{{ old('libelle') }}"
+                                        id="nom" name="libelle" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description du produit</label>
-                                    <input type="text" class="form-control" id="description" name="description"
-                                        required>
+                                    <input type="text" class="form-control" value="{{ old('description') }}"
+                                        id="description" name="description" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="nom" class="form-label">Prix</label>
-                                    <input type="number" class="form-control" id="nom" name="prix" required>
+                                    <label for="prix" class="form-label">Prix</label>
+                                    <input type="number" value="{{ old('prix') }}" class="form-control"
+                                        id="nom" name="prix" required>
                                 </div>
 
                                 <div class="mb-3">
@@ -281,7 +312,10 @@
 
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Image: </label>
-                                    <input type="file" class="form-control" id="image" name="image" required>
+                                    <input type="file" value="{{ old('image') }}" class="form-control"
+                                        id="image" name="image" required>
+                                    <div id="imageHelp" class="form-text">Formats acceptés : JPEG, PNG.</div>
+                                    <div id="imageHelp" class="form-text">Taille acceptées : 4Mo.</div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"

@@ -52,7 +52,7 @@ class ArticleController extends Controller
             // Créer un nouvel utilisateur
             Article::create($dataValid);
         
-        return back()->with('success', 'Le docteur a été ajouté avec succès.');
+        return back()->with('success', 'L\'article a été ajouté avec succès.');
     }
 
     public function show($id)

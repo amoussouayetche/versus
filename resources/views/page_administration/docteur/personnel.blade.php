@@ -3,6 +3,37 @@
 @php
 $total = 0
 @endphp
+@if (Auth::guard('admin')->check())
+<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
+                    class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="{{ route('liste-client') }}" class="nav-link">Retouner au chat</a>
+        </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                <i class="fas fa-expand-arrows-alt"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+           <form action="{{ route('deconnexion-a') }}" method="post">
+               @csrf
+               <button class="nav-link btn btn-link" type="submit">
+                   <i class="fas fa-sign-out-alt"></i> Déconnexion
+               </button>
+           </form>
+       </li>            
+    </ul>
+</nav>
+@endif
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -116,18 +147,18 @@ $total = 0
                     </td>
                 </tr>
                 <!-- debut Modal show -->
-                @include('page_administration.personnelShow')
+                @include('page_administration.docteur.personnelShow')
                 <!-- fin modal show -->
                 <!-- debut Modal modifier -->
-                @include('page_administration.personnelEdit')
+                @include('page_administration.docteur.personnelEdit')
                 <!-- fin modal modifier -->
                 <!-- debut Modal suppression -->
-                @include('page_administration.personnelDestroy')
+                @include('page_administration.docteur.personnelDestroy')
                 <!-- fin modal suppression -->
 
                 @endforeach
                 <!-- debut Modal ajouter -->
-                @include('page_administration.personnelCreate')
+                @include('page_administration.docteur.personnelCreate')
                 <!-- fin modal ajouter -->
 
             </tbody>

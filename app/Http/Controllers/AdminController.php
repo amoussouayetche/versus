@@ -15,7 +15,7 @@ class AdminController extends Controller
         //
         $personnel = Admin::all();
         // $role = Role::all();
-        return view('page_administration.personnel', compact('personnel'));
+        return view('page_administration.docteur.personnel', compact('personnel'));
     }
 
     public function store(Request $request)
@@ -26,7 +26,7 @@ class AdminController extends Controller
             'specialite' => 'required',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|min:8',
-            // 'contact' => 'required',
+            // 'role' => 'required',
             // 'role' => 'required',
             // 'image' => 'image|mimes:jpg,jpeg,png,svg'
         ], [
@@ -41,6 +41,8 @@ class AdminController extends Controller
             'image.image' => 'Le fichier doit être une image.',
             'image.mimes' => 'L\'image doit être au format jpg, jpeg, png ou svg.',
         ]);
+
+
 
         // $idPersonnel = Auth::guard('admin')->user()->idAdmin;
 

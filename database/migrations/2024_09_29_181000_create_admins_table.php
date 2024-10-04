@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('role');
+            // $table->string('role')->nullable;
             $table->string('image')->nullable();
             $table->string('email')->unique();
             $table->string('specialite');
@@ -24,11 +24,11 @@ return new class extends Migration
 
         DB::table('admins')->insert(
             [
-                'name' => 'Numero1',
-                'email' => 'numero1@gmail.com',
-                'role' => 'numero1',
+                'name' => 'Admin',
+                'email' => 'admin@gmail.com',
+                'role' => 'admin',
                 'specialite' => 'indefinie',
-                'password' => bcrypt('Numéro_1'),
+                'password' => bcrypt('Admin_Admin'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

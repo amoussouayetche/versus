@@ -24,7 +24,7 @@ use App\Http\Controllers\DashboardController;
 */
 
 Route::get('/', function () {
-    return view('auth.connexion');
+    return view('bienvenue');
 });
 
 // inscription
@@ -44,8 +44,8 @@ Route::get('/page-otp', [AuthController::class, 'pageOtp'])->name('page-otp');
 Route::post('/vérifier-otp', [AuthController::class, 'verifierOtp'])->name('verifier-otp');
 
 Route::middleware('auth.admin')->group(function () {
-     //déconnexion
-     Route::post('/deconnexion', [AuthController::class, 'deconnexion'])->name('deconnexion');
+    //déconnexion
+    Route::post('/deconnexion-a', [AuthController::class, 'deconnexionA'])->name('deconnexion-a');
 
      // dashboard
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -61,7 +61,7 @@ Route::middleware('auth.admin')->group(function () {
     Route::delete('categories/{id}', [CategorieController::class, 'destroy'])->name('destroy');
 
     //Concernant les produits
-    Route::get('Produits', [ProduitController::class, 'index'])->name('produit.index');
+    Route::get('produits', [ProduitController::class, 'index'])->name('produit.index');
     Route::post('ajout-produits', [ProduitController::class, 'store'])->name('produit.store');
     Route::post('produit/{id}', [ProduitController::class, 'update'])->name('modifierproduit');
     Route::delete('produit/{id}', [ProduitController::class, 'destroy'])->name('detruireproduit');

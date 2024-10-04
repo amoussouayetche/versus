@@ -144,12 +144,21 @@ class AuthController extends Controller
     {
         if (Auth::guard('client')->check()) {
             Auth::guard('client')->logout();
-        } else if (Auth::guard('admin')->check()) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        } 
+       
+        return redirect('/page-connexion'); // Redirige vers la page d'accueil après la déconnexion
+    }
+
+    public function deconnexionA(Request $request)
+    {
+       if (Auth::guard('admin')->check()) {
             Auth::guard('admin')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         }
        
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
         return redirect('/page-connexion'); // Redirige vers la page d'accueil après la déconnexion
     }
 

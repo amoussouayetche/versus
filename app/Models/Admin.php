@@ -17,7 +17,7 @@ class Admin extends Authenticatable implements AuthenticatableContract
         'name',
         'image',
         'email',
-        'role',
+        // 'role',
         'specialite',
         'password',
     ];

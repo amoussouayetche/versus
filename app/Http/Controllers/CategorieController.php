@@ -11,7 +11,7 @@ class CategorieController extends Controller
     public function index()
     {
         $categories = Categorie::get();
-        return view('page_administration.categorie', compact("categories"));
+        return view('page_administration.categorie.categorie', compact("categories"));
         //
     }
 

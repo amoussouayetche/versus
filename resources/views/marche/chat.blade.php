@@ -65,7 +65,7 @@ background-color: white;" class="container">
 
         <!-- Discuss Button -->
         <div class="col-12 text-center my-3">
-            <a href="#" class="discuss-btn text-decoration-none fw-bold px-4"> <i class="ri-chat-3-line"></i>Discuter</a>
+            <a href="{{ url('http://localhost:8000/chatify/'. $admin->id)}}" class="discuss-btn text-decoration-none fw-bold px-4"> <i class="ri-chat-3-line"></i>Discuter</a>
         </div>
 
         <!-- Description -->
