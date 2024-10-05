@@ -63,12 +63,12 @@
         <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
             <!-- Logo -->
             <div class="header">
-                <img src="{{ asset('/images/VENUS-SANS-FOND.PNG') }}" alt="Logo">
+                <img src="{{ asset(env('ASSET_PATH', '').'images/VENUS-SANS-FOND.PNG')}}" alt="Logo">
             </div>
     
             <!-- Image de la maison avec livraison -->
             <div class="content my-4">
-                <img src="{{ asset('/images/delivery.png') }}" alt="House Delivery">
+                <img src="{{ asset(env('ASSET_PATH', '').'images/delivery.png') }}" alt="House Delivery">
             </div>  
     
             <!-- Texte de présentation -->

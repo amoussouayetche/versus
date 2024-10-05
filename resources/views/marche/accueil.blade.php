@@ -2,7 +2,7 @@
 
 <!-- Preloader -->
 <div id="preloader">
-    <img src="{{ asset('/images/VENUS-SANS-FOND.PNG') }}" alt="Chargement..." />
+    <img src="{{ asset(env('ASSET_PATH', '').'images/VENUS-SANS-FOND.PNG') }}" alt="Chargement..." />
 </div>
 
 <div id="main-content" style="display: none;">
@@ -291,7 +291,7 @@
                     <div class="doctor-card p-3 bg-white rounded shadow text-left m-2"
                         style="min-width: 250px; max-width: 300px; display: flex; align-items: center;">
                         <!-- Image du docteur -->
-                        <img src="images/{{ $admin->image }}" alt="{{ $admin->name }}" class="rounded-3 mr-3"
+                        <img src="{{ asset(env('ASSET_PATH', '').'images/'.$admin->image) }}" alt="{{ $admin->name }}" class="rounded-3 mr-3"
                             style="width: 80px; height: 80px;">
 
                         <!-- Contenu de la carte -->
