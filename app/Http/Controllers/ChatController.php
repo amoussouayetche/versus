@@ -5,80 +5,141 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Client;
 use App\Models\Message;
+use App\Events\MessageSent;
 use Illuminate\Http\Request;
-use App\Events\ChatMessageEvent;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
+    // affiche les liste admin et client de la base
     public function showAdmins()
     {
         $lien = 'accueil';
-        $nom_page = 'Chat';
-        $clients = Client::get();
-        $admins = Admin::get(); // Obtenez tous les administrateurs
+        $nom_page = 'Information';
+        $clients = Client::all();
+        $admins = Admin::all(); // Obtenez tous les administrateurs
         return view('marche.liste_chat', compact('admins', 'clients', 'lien', 'nom_page'));
     }
 
-     // Afficher le chat avec un administrateur
-     public function chatWithAdmin(Admin $admin, Client $client)
-     {
+    // Afficher le chat avec un administrateur
+    public function chatWithAdmin(Admin $admin)
+    {
         $lien = 'liste-admin';
-
-        if (Auth::guard('client')->check()) {
         $nom_page = $admin->name;
-            $messages = Message::where(function ($query) use ($admin) {
-                $query->where('sender_id', Auth::guard('client')->id())
-                      ->where('receiver_id', $admin->id);
-            })->orWhere(function ($query) use ($admin) {
-                $query->where('sender_id', $admin->id)
-                      ->where('receiver_id', Auth::guard('admin')->id());
-            })->get(); // Récupérer tous les messages entre le client et l'admin
+        $client = Auth::guard('client')->user(); // Obtenez le client connecté
+        $messages = Message::where(function ($query) use ($admin, $client) {
+            $query->where('sender_id', $client->id)
+                  ->where('receiver_id', $admin->id);
+        })->orWhere(function ($query) use ($admin, $client) {
+            $query->where('sender_id', $admin->id)
+                  ->where('receiver_id', $client->id);
+        })->get(); // Récupérer tous les messages entre le client et l'admin
+
+        return view('marche.chat', compact('admin', 'messages', 'lien', 'client', 'nom_page'));
+    }
+
+    public function chatWithClient(Client $client)
+    {
+        $lien = 'liste-client';
+        $nom_page = $client->pseudo;
+        $admin = Auth::guard('admin')->user(); // Obtenez le client connecté
+        $messages = Message::where(function ($query) use ($client, $admin) {
+            $query->where('sender_id', $admin->id)
+                  ->where('receiver_id', $client->id);
+        })->orWhere(function ($query) use ($client, $admin) {
+            $query->where('sender_id', $client->id)
+                  ->where('receiver_id', $admin->id);
+        })->get(); // Récupérer tous les messages entre le client et l'admin
+
+        return view('marche.chat', compact('admin', 'messages', 'lien', 'client', 'nom_page'));
+    }
+
+    // Envoyer un message à l'administrateur
+    // public function sendMessage(Request $request, Admin $admin)
+    // {
+    //     $request->validate([
+    //         'message' => 'required|string',
+    //     ]);
+
+    //     $client = Auth::guard('client')->user(); // Obtenez le client connecté
+
+    //     Message::create([
+    //         'sender_id' => $client->id, // ID du client
+    //         'receiver_id' => $admin->id, // ID de l'admin
+    //         'sender_type' => 'client', // Type de l'expéditeur
+    //         'receiver_type' => 'admin', // Type du destinataire
+    //         'message' => $request->message,
+    //     ]);
+
+    //     return redirect()->route('chat.withAdmin', $admin->id)->with('success', 'Message envoyé.');
+    // }
     
-        } else if (Auth::guard('admin')->check()) {
-            $nom_page = $client->pseudo;
-            $messages = Message::where(function ($query) use ($client) {
-                $query->where('sender_id', Auth::guard('admin')->id())
-                      ->where('receiver_id', $client->id);
-            })->orWhere(function ($query) use ($client) {
-                $query->where('sender_id', $client->id)
-                      ->where('receiver_id', Auth::guard('admin')->id());
-            })->get();  
-        }
-        
-         return view('marche.chat', compact('admin', 'messages', 'lien', 'nom_page', 'client'));
-     }
- 
-     // Envoyer un message à l'administrateur
-     public function sendMessage(Request $request, Admin $admin, Client $client)
-     {
+    // Envoyer un message au client
+    // public function sendMessageToClient(Request $request, Client $client)
+    // {
+    //     $request->validate([
+    //         'message' => 'required|string',
+    //     ]);
+
+    //     $admin = Auth::guard('admin')->user(); // Obtenez l'admin connecté
+
+    //     Message::create([
+    //         'sender_id' => $admin->id, // ID de l'admin
+    //         'receiver_id' => $client->id, // ID du client
+    //         'sender_type' => 'admin', // Type de l'expéditeur
+    //         'receiver_type' => 'client', // Type du destinataire
+    //         'message' => $request->message,
+    //     ]);
+
+    //     return redirect()->route('chat.withClient', $client->id)->with('success', 'Message envoyé.');
+    // }
+   
+    public function sendMessage(Request $request, Admin $admin)
+    {
         $request->validate([
             'message' => 'required|string',
         ]);
-        if (Auth::guard('client')->check()) {
-            // Vérifier si l'utilisateur est authentifié en tant que client
-            Message::create([
-                'sender_id' => Auth::guard('client')->id(), // ID du client
-                'receiver_id' => $admin->id, // ID de l'admin
-                'message' => $request->message,
-            ]);
-            return redirect()->route('chat.withAdmin', $admin->id)->with('success', 'Message envoyé.');
+    
+        $client = Auth::guard('client')->user(); // Obtenez le client connecté
+    
+        // Crée le message dans la base de données
+        $message = Message::create([
+            'sender_id' => $client->id, // ID du client
+            'receiver_id' => $admin->id, // ID de l'admin
+            'sender_type' => 'client', // Type de l'expéditeur
+            'receiver_type' => 'admin', // Type du destinataire
+            'message' => $request->message,
+        ]);
+    
+        // Émet l'événement pour notifier le destinataire
+        event(new MessageSent($client, $message));
+    
+        return redirect()->route('chat.withAdmin', $admin->id)->with('success', 'Message envoyé.');
+    }
 
-        } elseif (Auth::guard('admin')->check()) {
-            // Vérifier si l'utilisateur est authentifié en tant qu'admin
-            Message::create([
-                'sender_id' => Auth::guard('admin')->id(), // ID de l'admin
-                'receiver_id' => $client->id, // ID du client
-                'message' => $request->message,
-            ]);
-            return redirect()->route('chat.withClient', $client->id)->with('success', 'Message envoyé.');
-
-        } else {
-            // Si aucun utilisateur n'est authentifié, retour à la page de connexion
-            return redirect()->route('page-connexion')->withErrors(['error' => 'Utilisateur non connecté.']);
-        }
-         
-     }
 
    
+    public function sendMessageToClient(Request $request, Client $client)
+    {
+        $request->validate([
+            'message' => 'required|string',
+        ]);
+
+        $admin = Auth::guard('admin')->user(); // Obtenez l'admin connecté
+
+        // Crée le message dans la base de données
+        $message = Message::create([
+            'sender_id' => $admin->id, // ID de l'admin
+            'receiver_id' => $client->id, // ID du client
+            'sender_type' => 'admin', // Type de l'expéditeur
+            'receiver_type' => 'client', // Type du destinataire
+            'message' => $request->message,
+        ]);
+
+        // Émet l'événement pour notifier le destinataire
+        event(new MessageSent($admin, $message));
+
+        return redirect()->route('chat.withClient', $client->id)->with('success', 'Message envoyé.');
+    }
+    
 }

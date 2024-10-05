@@ -1,7 +1,7 @@
 @extends('index')
 @section('content')
     @include('partials.header')
-    <div style="margin-top: 100px;" class="container d-flex flex-col align-items-center justify-content-center">
+    <div style="height: 100vh;" class="container d-flex flex-col align-items-center justify-content-center">
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12">
                 <form action="{{ route('condition', $client->id) }}" method="POST">

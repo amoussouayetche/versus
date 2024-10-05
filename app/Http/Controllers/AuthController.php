@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -78,6 +79,16 @@ class AuthController extends Controller
             'condition' => $validatedData['condition'],
         ]);
         
+        // Insérer également les informations du client dans la table 'users' de la base de données 'chatsystem'
+        DB::connection('mysql_chat')->table('users')->insert([
+            'name' => $validatedData['pseudo'],  // Utiliser 'pseudo' pour le nom
+            'email' => $validatedData['tel'],    // Utiliser le numéro de téléphone comme email ou identifiant unique
+            'password' => bcrypt($validatedData['password']), // Hasher le mot de passe
+            'role' => 'client',  // Ajouter un rôle pour identifier cet utilisateur comme client
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
         return redirect()->route('page-condition', ['client' => $client->id]);
     }
 
@@ -122,7 +133,9 @@ class AuthController extends Controller
         }
     
         // Si aucune tentative ne fonctionne, retourner un message d'erreur
-        return back()->withErrors([
+        return back()->withInput([
+            'pseudo' => $credentials['pseudo'],
+        ])->withErrors([
             'pseudo' => 'Les informations de connexion sont incorrectes.',
         ]);
     }
@@ -131,12 +144,21 @@ class AuthController extends Controller
     {
         if (Auth::guard('client')->check()) {
             Auth::guard('client')->logout();
-        } else if (Auth::guard('admin')->check()) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        } 
+       
+        return redirect('/page-connexion'); // Redirige vers la page d'accueil après la déconnexion
+    }
+
+    public function deconnexionA(Request $request)
+    {
+       if (Auth::guard('admin')->check()) {
             Auth::guard('admin')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         }
        
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
         return redirect('/page-connexion'); // Redirige vers la page d'accueil après la déconnexion
     }
 

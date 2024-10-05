@@ -24,8 +24,13 @@
     }
 </style>
 
-<div class="container mt-5">
-    <div style="margin-top: 100px; margin-bottom: -200px;"  class="row ">
+<div style="margin-top: 60px; 
+margin-bottom: 60px;
+overflow-y: auto;
+flex: 1;
+padding: 20px;
+background-color: white;" class="container mt-5">
+    <div class="row ">
         <div class="col-sm-12">
             <h3 class="text-center mb-4">Utilisez l'un des moyens de
                 paiement

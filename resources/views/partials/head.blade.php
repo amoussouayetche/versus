@@ -11,7 +11,10 @@
     {{-- bootstrap css --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+        <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+        rel="stylesheet"
+    />
     {{-- icone --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -19,13 +22,15 @@
     <meta name="theme-color" content="#6777ef" />
     <meta name="apple-mobile-web-app-status-bar" content="#01d679">
     <meta name="mobile-web-app-capable" content="yes">
-    
+
     <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
+    <link rel="manifest" href="{{ asset('/manifest.json') }}">
     <link rel="manifest" href="{{ asset('/manifest.json') }}">
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&display=swap" rel="stylesheet">
 
     <link rel="apple-touch-icon" sizes="16x16" href="/pwa/icons/ios/16.png">
     <link rel="apple-touch-icon" sizes="20x20" href="/pwa/icons/ios/20.png">
@@ -66,7 +71,13 @@
         }
 
         body {
-            background-color: rgba(215, 212, 212, 0.519);
+            font-family: 'Afacad Flux', Arial, sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
         .header {
@@ -92,9 +103,9 @@
         }
 
         .active {
-            color: #530c78de !important; 
+            color: #530c78de !important;
         }
-        
+
         .category-list li.active {
             background-color: #530c78;
             color: #fff;
@@ -142,7 +153,7 @@
         .product-title {
             font-size: 16px;
             font-weight: bold;
-            color: #333;
+            color: black;
         }
 
         .product-price {
@@ -164,7 +175,7 @@
         }
 
         .wishlist-icon i:hover {
-            color: #e60000;
+            color: blueviolet;
         }
 
         /* panier */
@@ -232,6 +243,13 @@
             color: #ff5e5e;
             margin-left: 10px;
         }
+
+        /* Thème sombre (désactivé) */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: white; /* Forcer la couleur de fond */
+            }
+        }
     </style>
-    
+
 </head>

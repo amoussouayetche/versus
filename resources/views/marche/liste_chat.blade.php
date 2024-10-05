@@ -1,9 +1,14 @@
 @include('partials.head')
 @include('partials.header')
 
-<div class="container">
+<div style="margin-top: 60px; 
+margin-bottom: 60px;
+overflow-y: auto;
+flex: 1;
+padding: 20px;
+background-color: white;" class="container">
     <!-- Champ de recherche -->
-    <div class="row" style="margin-top: 60px;">
+    <div class="row">
         <div class="col-sm-12">
             <div class="group-input input-group d-flex flex-row mb-3">
                 <input type="search" class="input-radius form-control shadow @error('recherche') is-invalid @enderror"
@@ -20,14 +25,15 @@
 
     {{-- liste des personne de discution --}}
     @if (Auth::guard('client')->check())
-    <div style="margin-bottom: 100px" class="row">
+    <div class="row">
+
         @foreach ($admins as $admin)
             <div class="col-md-4 col-sm-6 mb-4">
-                <div class="card shadow-sm h-100">
+                <div class="card shadow h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <img src="images/homme.png" class="rounded-3" style="width: 60px; height: 60px;"
+                                <img src="images/{{ $admin->image }}" class="rounded-3" style="width: 60px; height: 60px;"
                                     alt="{{ $admin->name }}">
                                 <div class="ms-3">
                                     {{-- <label style="background-color: rgb(182, 212, 255)" class="m-0 w-100 border border-2 rounded-pill">{{ $admin->specialite }} professionnel</label> --}}
@@ -44,7 +50,7 @@
                         <div class="d-flex justify-content-between">
                             <a href="{{ route('chat.withAdmin', $admin->id) }}"
                                 class="btn btn-outline-primary w-100 me-2 d-flex align-items-center justify-content-center">
-                                <i class="fa fa-comments"></i> Discuter
+                                 En savoir plus <i class="fa fa-arrow-right mx-1"></i>
                             </a>
                             <a href="{{ route('chat.withAdmin', $admin->id) }}" class="btn btn-primary w-100">
                                 Prendre rendez-vous
@@ -75,7 +81,7 @@
                         <div class="d-flex justify-content-between">
                             <a style="color: blueviolet; border: 1px solid blueviolet;" href="{{ route('chat.withClient', $client->id) }}"
                                 class="fw-bold btn btn-outline-primary w-100 me-2 d-flex align-items-center justify-content-center">
-                                <i class="fa fa-comments"></i> Discuter
+                                En savoir plus
                             </a>
                         </div>
                     </div>

@@ -2,8 +2,12 @@
 
 @section('content')
 
-<div class="container center-container">
-    <div class="row" style="margin-top: 100px;">
+<div style="margin-top: 0; 
+    margin-bottom: 0;
+    flex: 1;
+    padding: 20px;
+    background-color: white;" class="container center-container">
+    <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <form action="{{ route('connexion') }}" method="POST">
                 @csrf

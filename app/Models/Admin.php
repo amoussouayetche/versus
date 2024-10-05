@@ -15,7 +15,9 @@ class Admin extends Authenticatable implements AuthenticatableContract
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
+        'image',
         'email',
+        // 'role',
         'specialite',
         'password',
     ];

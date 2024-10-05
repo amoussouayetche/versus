@@ -14,54 +14,57 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            // $table->string('role')->nullable;
+            $table->string('image')->nullable();
             $table->string('email')->unique();
-            $table->string('specialite')->unique();
-            $table->string('password')->unique();
+            $table->string('specialite');
+            $table->string('password');
             $table->timestamps();
         });
 
-        DB::table('admins')->insert([
+        DB::table('admins')->insert(
             [
-                'name' => 'Dr. Weber',
-                'email' => 'weber@example.com',
-                'specialite' => 'Sexologue',
-                'password' => bcrypt('123456789'),
+                'name' => 'Admin',
+                'email' => 'admin@gmail.com',
+                'role' => 'admin',
+                'specialite' => 'indefinie',
+                'password' => bcrypt('Admin_Admin'),
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-            [
-                'name' => 'Dr. Martin',
-                'email' => 'martin@example.com',
-                'specialite' => 'Cardiologue',
-                'password' => bcrypt('123456789'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Dr. Durand',
-                'email' => 'durand@example.com',
-                'specialite' => 'Dermatologue',
-                'password' => bcrypt('123456789'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Dr. Moreau',
-                'email' => 'moreau@example.com',
-                'specialite' => 'Psychologue',
-                'password' => bcrypt('123456789'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Dr. Lefevre',
-                'email' => 'lefevre@example.com',
-                'specialite' => 'Neurologue',
-                'password' => bcrypt('123456789'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+            ]);
+        //     [
+        //         'name' => 'Dr. Martin',
+        //         'email' => 'martin@example.com',
+        //         'specialite' => 'Cardiologue',
+        //         'password' => bcrypt('123456789'),
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'name' => 'Dr. Durand',
+        //         'email' => 'durand@example.com',
+        //         'specialite' => 'Dermatologue',
+        //         'password' => bcrypt('123456789'),
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'name' => 'Dr. Moreau',
+        //         'email' => 'moreau@example.com',
+        //         'specialite' => 'Psychologue',
+        //         'password' => bcrypt('123456789'),
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'name' => 'Dr. Lefevre',
+        //         'email' => 'lefevre@example.com',
+        //         'specialite' => 'Neurologue',
+        //         'password' => bcrypt('123456789'),
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        // ]);
     }
 
     /**
