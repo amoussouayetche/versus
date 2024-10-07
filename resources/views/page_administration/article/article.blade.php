@@ -103,7 +103,7 @@ $total = 0
                     <td>{{ \Illuminate\Support\Str::words($article->resume, 30, '...') }}</td>
                     <td>{{ $article->lien }}</td>
                     {{-- <td>{{ $article -> role }}</td> --}}
-                    <td> <img src="/images/{{ $article->image }}" width="96" height="96" alt="image article"> </td>
+                    <td> <img src="{{ asset(env('ASSET_PATH', '').'images/'. $article->image) }}" width="96" height="96" alt="image article"> </td>
                     {{-- <td>{{ $article -> created_at }}</td> --}}
                     <td>
                         <form method="post" enctype="multipart/form-data">

@@ -103,7 +103,7 @@ $total = 0
                     <td>{{ $personnel -> email }}</td>
                     <td>{{ $personnel -> specialite }}</td>
                     {{-- <td>{{ $personnel -> role }}</td> --}}
-                    <td> <img src="/images/{{ $personnel->image }}" width="96" height="96" alt="image personnel"> </td>
+                    <td> <img src="{{ asset(env('ASSET_PATH', '').'images/'. $personnel->image) }}" width="96" height="96" alt="image personnel"> </td>
                     {{-- <td>{{ $personnel -> created_at }}</td> --}}
                     <td>
                         <form method="post" enctype="multipart/form-data">

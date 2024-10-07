@@ -17,7 +17,7 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-2 p-3 mb-3 d-flex px-4">
                 @if (Auth::guard('admin')->user()->image)
-                    <img src="/images/{{ Auth::guard('admin')->user()->image }}" class="" alt="User Image">
+                    <img src="{{ asset(env('ASSET_PATH', '').'images/'. Auth::guard('admin')->user()->image) }}" class="" alt="User Image">
                 @endif
                 <div class="info">
                     <a href="#" class="d-block"

@@ -13,7 +13,7 @@
                 @csrf
                 <div class="d-flex align-items-center justify-content-center">
 
-                    <img src="images/VENUS.PNG" width="200" height="150" alt="image de venus">
+                    <img src="{{ asset(env('ASSET_PATH', '').'images/VENUS.PNG') }}" width="200" height="150" alt="image de venus">
                 </div>
                 <h1 class="text-center my-4">Connectez-vous à votre compte</h1>
                 <!-- Champ Pseudo -->

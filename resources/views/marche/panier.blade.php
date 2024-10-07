@@ -13,7 +13,7 @@
             @foreach (session('cart') as $id => $details)
                 {{-- Article du panier --}}
                 <div class="col-12 cart-item d-flex align-items-center shadow" rowId="{{ $id }}">
-                    <img src="images/{{ $details['image'] }}" alt="image du produit" class="item-image m-2">
+                    <img src="{{ asset(env('ASSET_PATH', '').'images/'. $details['image']) }}" alt="image du produit" class="item-image m-2">
                     <div class="item-info">
                         <h5 class="item-title text-truncate fs-4">
                             {{ \Illuminate\Support\Str::words($details['libelle'], 10, '...') }}</h5>

@@ -68,7 +68,7 @@
                         <a class="text-decoration-none" href="{{ route('ajouter-produit', $produit->id) }}">
                             <i class="ri-shopping-cart-2-line text-primary"></i></a>
                     </div>
-                    <img class="m-2 rounded-3" src="images/{{ $produit->image }}" alt="image du poduit">
+                    <img class="img-fluid mb-3 rounded-3" src="{{ asset(env('ASSET_PATH', '').'images/' . $produit->image ) }}" alt="image du poduit">
                     <div class="card-body">
                         <h5 class="product-title text-truncate fs-5">{{ $produit->libelle }} -
                             {{ \Illuminate\Support\Str::words($produit->description, 10, '...') }}</h5>
