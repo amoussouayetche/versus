@@ -13,7 +13,7 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <img src="{{ asset(env('ASSET_PATH', '').'images/'.$article->image ) }}" width="300" height="300"
+                        <img src="{{ asset(env('ASSET_PATH', '').'images/'. $article->image) }}" width="300" height="300"
                             class="rounded-3 mx-auto d-block" alt="image du article">
                     </div>
                     <div class="mb-3">

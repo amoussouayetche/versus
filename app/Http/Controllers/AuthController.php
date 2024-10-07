@@ -79,15 +79,23 @@ class AuthController extends Controller
             'condition' => $validatedData['condition'],
         ]);
         
-        // Insérer également les informations du client dans la table 'users' de la base de données 'chatsystem'
-        DB::connection('mysql_chat')->table('users')->insert([
-            'name' => $validatedData['pseudo'],  // Utiliser 'pseudo' pour le nom
-            'email' => $validatedData['tel'],    // Utiliser le numéro de téléphone comme email ou identifiant unique
-            'password' => bcrypt($validatedData['password']), // Hasher le mot de passe
+        DB::table('users')->insert([
+            'name' => $client->pseudo,  
+            'email' => $client->tel,    // Utiliser le numéro de téléphone comme email ou identifiant unique
+            'password' => $client->password, 
             'role' => 'client',  // Ajouter un rôle pour identifier cet utilisateur comme client
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        // Insérer également les informations du client dans la table 'users' de la base de données 'chatsystem'
+        // DB::connection('mysql_chat')->table('users')->insert([
+        //     'name' => $client->pseudo,  
+        //     'email' => $client->tel,    // Utiliser le numéro de téléphone comme email ou identifiant unique
+        //     'password' => $client->password, 
+        //     'role' => 'client',  // Ajouter un rôle pour identifier cet utilisateur comme client
+        //     'created_at' => now(),
+        //     'updated_at' => now(),
+        // ]);
         
         return redirect()->route('page-condition', ['client' => $client->id]);
     }
@@ -109,6 +117,8 @@ class AuthController extends Controller
 
     public function connexion(Request $request)
     {
+        // $password = $request->password;
+        // dd($password);
         // Valider les données pour le pseudo et mot de passe
         $credentials = $request->validate([
             'pseudo' => ['required', 'string'],
@@ -122,7 +132,10 @@ class AuthController extends Controller
         if (Auth::guard('client')->attempt(['pseudo' => $credentials['pseudo'], 'password' => $credentials['password']])) {
             // Si la connexion réussit avec le guard 'client'
             $request->session()->regenerate();
-            return redirect()->intended('accueil')->with('success', 'Connexion réussie.');
+            return redirect()->intended('accueil')->with([
+                'success' => 'Connexion réussie.',
+                // 'password' => $password,
+            ]);
         }
         
         // Si la connexion avec le pseudo échoue, tenter la connexion avec un email pour le guard par défaut (ex: web/admin)

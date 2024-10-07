@@ -33,7 +33,7 @@ background-color: white;" class="container">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <img src="{{ asset(env('ASSET_PATH', '').'images/'.$admin->image) }}" class="rounded-3" style="width: 60px; height: 60px;"
+                                <img src="{{ asset(env('ASSET_PATH', '').'images/'. $admin->image) }}" class="rounded-3" style="width: 60px; height: 60px;"
                                     alt="{{ $admin->name }}">
                                 <div class="ms-3">
                                     {{-- <label style="background-color: rgb(182, 212, 255)" class="m-0 w-100 border border-2 rounded-pill">{{ $admin->specialite }} professionnel</label> --}}

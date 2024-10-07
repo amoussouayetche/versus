@@ -258,8 +258,8 @@
                                 <i class="ri-shopping-cart-2-line"></i></a>
                         </div> --}}
                         <div>
-                            <img style="width: 100%;" src="images/{{ $produit->image }}"
-                            alt="{{ $produit->libelle }}" class="img-fluid mb-3" style="border-radius: 10px;">
+                            <img style="width: 100%;" src="{{ asset('images/' . $produit->image) }}"
+                            alt="{{ $produit->libelle }}" class="img-fluid mb-3 rounded-3" style="border-radius: 10px;">
                         </div>
                         <div>
                             <p class="mb-1" style="font-size: 1.1em; font-weight: 500;">{{ $produit->libelle }}</p>
@@ -291,7 +291,7 @@
                     <div class="doctor-card p-3 bg-white rounded shadow text-left m-2"
                         style="min-width: 250px; max-width: 300px; display: flex; align-items: center;">
                         <!-- Image du docteur -->
-                        <img src="{{ asset(env('ASSET_PATH', '').'images/'.$admin->image) }}" alt="{{ $admin->name }}" class="rounded-3 mr-3"
+                        <img src="{{ asset(env('ASSET_PATH', '').'images/'. $admin->image) }}" alt="{{ $admin->name }}" class="rounded-3 mr-3"
                             style="width: 80px; height: 80px;">
 
                         <!-- Contenu de la carte -->

@@ -45,7 +45,7 @@ background-color: white;" class="container">
     <div class="row">
         <!-- Doctor Image -->
         <div class="col-12">
-            <img src="{{ asset(env('ASSET_PATH', '').'images/'.$admin->image) }}" alt="{{ $admin->name }}" class="doctor-image">
+            <img src="{{ asset(env('ASSET_PATH', '').'images/'. $admin->image) }}" alt="{{ $admin->name }}" class="doctor-image">
         </div>
 
         <!-- Doctor Information -->

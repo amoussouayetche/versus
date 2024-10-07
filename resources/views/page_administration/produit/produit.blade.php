@@ -93,7 +93,7 @@
                             <td>{{ $produit->prix }}</td>
                             <td>{{ $produit->categorie }}</td>
 
-                            <td> <img src="{{ asset(env('ASSET_PATH', '').'images/'.$produit->image ) }}" width="100" height="100"> </td>
+                            <td> <img src="{{ asset(env('ASSET_PATH', '').'images/'. $produit->image) }}" width="100" height="100"> </td>
                             <td>
                                 <a href="" class="btn btn-success" data-bs-toggle="modal"
                                     data-bs-target="#voir{{ $produit->id }}" data-bs-whatever="@mdo"><svg
@@ -232,7 +232,7 @@
                                         @csrf
                                         <div class="modal-body">
                                             <div class="mb-3">
-                                                <img src="{{ asset(env('ASSET_PATH', '').'images/'.$produit->image ) }}" width="300" height="300"
+                                                <img src="{{ asset(env('ASSET_PATH', '').'images/'. $produit->image) }}" width="300" height="300"
                                                     class="rounded-3 mx-auto d-block" alt="image du personnel">
                                             </div>
 
