@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            // $table->string('role')->nullable;
+            $table->string('role')->nullable();
             $table->string('image')->nullable();
             $table->string('email')->unique();
             $table->string('specialite');
@@ -32,39 +32,6 @@ return new class extends Migration
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        //     [
-        //         'name' => 'Dr. Martin',
-        //         'email' => 'martin@example.com',
-        //         'specialite' => 'Cardiologue',
-        //         'password' => bcrypt('123456789'),
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'name' => 'Dr. Durand',
-        //         'email' => 'durand@example.com',
-        //         'specialite' => 'Dermatologue',
-        //         'password' => bcrypt('123456789'),
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'name' => 'Dr. Moreau',
-        //         'email' => 'moreau@example.com',
-        //         'specialite' => 'Psychologue',
-        //         'password' => bcrypt('123456789'),
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'name' => 'Dr. Lefevre',
-        //         'email' => 'lefevre@example.com',
-        //         'specialite' => 'Neurologue',
-        //         'password' => bcrypt('123456789'),
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        // ]);
     }
 
     /**

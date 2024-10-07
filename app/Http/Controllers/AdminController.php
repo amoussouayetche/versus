@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -66,16 +67,25 @@ class AdminController extends Controller
             }
 
             // Créer un nouvel utilisateur
-            Admin::create($dataValid);
+            $admin = Admin::create($dataValid);
+
+            User::create([
+                    'name' => $admin->name,          
+                    'email' => $admin->email,        
+                    'password' => $admin->password,  
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
 
             // Insérer dans la table users de la base 'chatsystem'
-            DB::connection('mysql_chat')->table('users')->insert([
-                'name' => $dataValid['name'],
-                'email' => $dataValid['email'],
-                'password' => $dataValid['password'], // Hashed password
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            // DB::connection('mysql_chat')->table('users')->insert([
+            //     'name' => $admin->name,          
+            //     'email' => $admin->email,        
+            //     'password' => $admin->password,  
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ]);
+
         
         return back()->with('success', 'Le docteur a été ajouté avec succès.');
     }
@@ -135,14 +145,21 @@ class AdminController extends Controller
         // Sauvegarder les modifications dans la base de données
         $personnel->save();
 
-        // Mettre à jour également dans la table 'users' de la base de données 'chatsystem'
-        DB::connection('mysql_chat')->table('users')
+        DB::table('users')
         ->where('email', $personnel->email)  // Trouver l'utilisateur par email ou un autre identifiant unique
         ->update([
-            'name' => $dataValid['name'],
-            'email' => $dataValid['email'],
+            'name' => $personnel->name,
+            'email' => $personnel->email,
             'updated_at' => now(),
         ]);
+        // Mettre à jour également dans la table 'users' de la base de données 'chatsystem'
+        // DB::connection('mysql_chat')->table('users')
+        // ->where('email', $personnel->email)  // Trouver l'utilisateur par email ou un autre identifiant unique
+        // ->update([
+        //     'name' => $personnel->name,
+        //     'email' => $personnel->email,
+        //     'updated_at' => now(),
+        // ]);
 
         return back()->with('success', 'Le personnel a été modifié avec succès.');
     }
@@ -159,10 +176,13 @@ class AdminController extends Controller
         // Supprimer l'utilisateur de la base de données 'venus'
         $personnel->delete();
 
+        DB::table('users')
+        ->where('email', $personnel->email)  // Trouver l'utilisateur par email ou un autre identifiant unique
+        ->delete();
         // Supprimer également de la table 'users' dans la base de données 'chatsystem'
-        DB::connection('mysql_chat')->table('users')
-            ->where('email', $personnel->email)  // Trouver l'utilisateur par email ou un autre identifiant unique
-            ->delete();
+        // DB::connection('mysql_chat')->table('users')
+        //     ->where('email', $personnel->email)  // Trouver l'utilisateur par email ou un autre identifiant unique
+        //     ->delete();
 
         return back()->with('success', 'Le personnel a été supprimé avec succès.');
     }

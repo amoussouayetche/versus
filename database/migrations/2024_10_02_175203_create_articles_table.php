@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('libelle');
             $table->text('resume');
             $table->string('lien');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
