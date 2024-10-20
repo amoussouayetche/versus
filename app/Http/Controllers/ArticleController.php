@@ -12,8 +12,9 @@ class ArticleController extends Controller
     {
         //
         $articles = Article::all();
+        $article = Article::all();
         // $role = Role::all();
-        return view('page_administration.article.article', compact('articles'));
+        return view('page_administration.article.article', compact('articles', 'article'));
     }
 
     public function store(Request $request)
