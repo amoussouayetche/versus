@@ -58,7 +58,7 @@ class AdminController extends Controller
                 // Vous pouvez maintenant procéder avec le traitement du fichier
                 $imagePath = 'images/';
                 $uniqueImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-                $image->move($imagePath, $uniqueImage);
+                $image->move(public_path($image_path), $uniqueImage);                       
                 $dataValid['image'] = $uniqueImage;
             } else {
                 // Gérer le cas où aucun fichier n'a été téléversé
