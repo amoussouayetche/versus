@@ -60,14 +60,16 @@ class ArticleController extends Controller
     {
         //
         $articles= Article::find($id);
-        return view('page_administration.article.articleShow', compact('articles'));
+        $article= Article::find($id);
+        return view('page_administration.article.articleShow', compact('articles', 'article'));
     }
 
     public function edit($id)
     {
         //
         $articles = Article::find($id);
-        return view('page_administration.article.articleEdit', compact('articles'));
+        $article = Article::find($id);
+        return view('page_administration.article.articleEdit', compact('articles', 'article'));
     }
 
     public function update(Request $request, $id)
