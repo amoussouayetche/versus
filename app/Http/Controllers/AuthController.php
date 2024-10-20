@@ -117,8 +117,6 @@ class AuthController extends Controller
 
     public function connexion(Request $request)
     {
-        // $password = $request->password;
-        // dd($password);
         // Valider les données pour le pseudo et mot de passe
         $credentials = $request->validate([
             'pseudo' => ['required', 'string'],

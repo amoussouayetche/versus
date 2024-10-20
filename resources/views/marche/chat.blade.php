@@ -80,7 +80,7 @@ background-color: white;" class="container">
 
         <!-- Appointment Button -->
         <!-- boutton pour prendre un rendez-vous-->
-        <div class="col-sm-12 total-container">
+        <div class="col-sm-12 total-container bg-white">
           
             <a style="width: 80%;" href="#"
                 class="checkout-btn text-decoration-none fs-4">Prendre un rendez-vous <i style="color: blueviolet"

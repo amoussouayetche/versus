@@ -107,6 +107,7 @@ $total = 0
                     {{-- <td>{{ $article -> created_at }}</td> --}}
                     <td>
                         <form method="post" enctype="multipart/form-data">
+                            @csrf
                             <a href=" {{ route('articles.show', $article->id) }} "
                                 class="btn btn-success" data-bs-toggle="modal"
                                 data-bs-target="#voir{{ $article->id }}">

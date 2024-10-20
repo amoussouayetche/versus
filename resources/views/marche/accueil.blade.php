@@ -213,7 +213,7 @@
                 @foreach ($articles as $index => $article)
                     <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
                         <div class="article"
-                            style="position: relative; background-image: url('images/{{ $article->image }}'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; padding: 20px; color: white; border-radius: 10px;">
+                            style="position: relative; background-image: url({{ asset(env('ASSET_PATH', '').'images/'. $article->image) }}); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; padding: 20px; color: white; border-radius: 10px;">
                             <div class="overlay"
                                 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); border-radius: 10px;">
                             </div>
@@ -248,20 +248,20 @@
             <a href="#" class="text-uppercase text-decoration-none fw-bold text-nowrap">Tout voir <i
                     class="fa-solid fa-angle-right"></i></a>
         </div>
-        <div class="d-flex overflow-auto products">
+        <div class="d-flex overflow-auto products" style="white-space: nowrap;">
             <!-- Cartes des produits -->
             @foreach ($produits as $produit)
-                <div class="col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center">
-                    <div class="product-card text-center p-3 shadow d-flex flex-column justify-content-around" style="border-radius: 10px;">
-                        {{-- <div class="wishlist-icon" style="position: absolute; top: 10px; right: 10px;">
-                            <a href="{{ route('ajouter-produit', $produit->id) }}">
-                                <i class="ri-shopping-cart-2-line"></i></a>
-                        </div> --}}
-                        <div>
-                            <img style="width: 100%;" src="{{ asset('images/' . $produit->image) }}"
-                            alt="{{ $produit->libelle }}" class="img-fluid mb-3 rounded-3" style="border-radius: 10px;">
+                <div class="col-sm-6 col-md-4 col-lg-3 d-inline-block mx-2" style="width: 250px;">
+                    <div class="product-card text-center p-3 shadow"
+                         style="border-radius: 10px; height: 100%; min-height: 350px;">
+                         
+                        <div class="image-container" style="position: relative; width: 100%; height: 200px;">
+                            <img src="{{ asset(env('ASSET_PATH', '').'images/' . $produit->image) }}"
+                            alt="{{ $produit->libelle }}" class="img-fluid rounded-3"
+                            style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
                         </div>
-                        <div>
+        
+                        <div class="product-info mt-3">
                             <p class="mb-1" style="font-size: 1.1em; font-weight: 500;">{{ $produit->libelle }}</p>
                             <p style="font-size: 1.2em; font-weight: bold; color: #1d327f;">{{ $produit->prix }} FCFA</p>
                         </div>
@@ -269,6 +269,7 @@
                 </div>
             @endforeach
         </div>
+        
 
         <!-- Chat Section -->
         <div class="chat-section p-4 bg-white rounded shadow-sm">
